@@ -22,7 +22,6 @@ public class VehicleControllers {
     public List<Vehicle> getVehicles(){
         List<Vehicle> vehicles = new ArrayList<>();
 
-        DataSource dataSource;
         try(Connection connection = dataSource.getConnection();
             PreparedStatement pStatement = connection.prepareStatement("SELECT * FROM cardealership.vehicles;");
             ResultSet results = pStatement.executeQuery())
