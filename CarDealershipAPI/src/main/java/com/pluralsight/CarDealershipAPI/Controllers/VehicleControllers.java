@@ -19,7 +19,18 @@ public class VehicleControllers {
         this.dataSource = dataSource;
     }
 
-    public List<Vehicle> getVehicles(){
+    public List<Vehicle> getVehicles(
+            double minPrice,
+            double maxPrice,
+            String make,
+            String model,
+            int minYear,
+            int maxYear,
+            String color,
+            int minMiles,
+            int maxMiles,
+            String type
+    ){
         List<Vehicle> vehicles = new ArrayList<>();
 
         try(Connection connection = dataSource.getConnection();
@@ -29,10 +40,10 @@ public class VehicleControllers {
             while (results.next()){
                 int vehicleVin = results.getInt("VehicleVIN");
                 int year = results.getInt("Year");
-                String make = results.getString("Make");
-                String model = results.getString("Model");
+                make = results.getString("Make");
+                model = results.getString("Model");
                 String vehicleType = results.getString("VehicleType");
-                String color = results.getString("Color");
+                color = results.getString("Color");
                 int odometer = results.getInt("Odometer");
                 double price = results.getDouble("Price");
 
