@@ -1,20 +1,35 @@
 package com.pluralsight.CarDealershipAPI.dao.interfaces;
 import com.pluralsight.CarDealershipAPI.Console;
+import com.pluralsight.CarDealershipAPI.dao.impl.ContractDao;
+import com.pluralsight.CarDealershipAPI.dao.impl.DealershipDao;
 import com.pluralsight.CarDealershipAPI.models.*;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserInterface {
+        private Dealership currentDealership;
+        private ArrayList<Contract> contracts;
+        private DealershipDao dealershipDAO;
+        private ContractDao contractDAO;
+        private DataSource dataSource;
 
-    public static final String filename_dealership = "inventory.csv";
-    public static String filename_contracts = "Contracts.csv";
-    public Dealership currentDealership;
-    public ArrayList<Contract> contracts;
+        public UserInterface(DataSource dataSource) {
+            this.dataSource = dataSource;
 
+            try (Connection connection = dataSource.getConnection()) {
+                dealershipDAO = new DealershipDao(connection);
+                contractDAO = new ContractDao(connection);
 
-    public UserInterface(){
-        currentDealership = DealershipFileManager.getFromCSV(filename_dealership);
-        contracts = ContractFileManager.getFromCSV(filename_contracts);
+                currentDealership = dealershipDAO.getFromDatabase();
+                contracts = contractDAO.getAllContracts();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.exit(1);  // Exit if database connection fails
+            }
     }
 
 
@@ -86,7 +101,7 @@ public class UserInterface {
         int odometer = Console.PromptForInt("Enter odometer: ");
         double price = Console.PromptForDouble("Enter price: ");
 
-        Vehicle v = new Vehicle(vin,year, make, model, vehicleType, color, odometer, price);
+        Vehicle v = new Vehicle(vin, rs.getInt("year"), rs.getString("make"), rs.getString("model"), rs.getString("vehicle_type"), rs.getString("color"), rs.getInt("odometer"), rs.getDouble("price"));
 
         currentDealership.addVehicleToInventory(v);
         DealershipFileManager.saveToCSV(currentDealership, filename_dealership);
@@ -241,9 +256,9 @@ public class UserInterface {
                 System.out.println("Please enter 'yes' or 'no'.");
             } while (true);
 
-            contract = new SalesContract(date, customerName, customerEmail, vehicle, isFinanced);
+            contract = new SalesContract(rs.getInt("SalesContractID"), date, customerName, customerEmail, vehicle, isFinanced);
         } else {
-            contract = new LeaseContract(date,customerName,customerEmail,vehicle);
+            contract = new LeaseContract(int leaseContractID, String contractDate, String customerName, String customerEmail, Vehicle vehicleSold);
         }
 
         contracts.add(contract);

@@ -1,75 +1,101 @@
 package com.pluralsight.CarDealershipAPI.models;
 
 public class LeaseContract extends Contract {
-    private double expectedEndingValue;
-    private final double expectedEndingValuePctOfPrice = 0.50;
-    private double LeaseFee;
-    private final double leaseFeePercentage = 0.07;
+    private int leaseContractID;
+    private String contractDate;
+    private String customerName;
+    private String customerEmail;
+    private Vehicle vehicleSold;
+    private double leaseContractExpectedFinalValue;
+    private double leaseContractLeaseFee;
+    private double totalPrice;
+    private double monthlyPayment;
 
-    public LeaseContract(String dateOfContract, String customerName, String customerEmail, Vehicle vehicleSold) {
-        super(dateOfContract, customerName, customerEmail, vehicleSold);
-        this.expectedEndingValue = vehicleSold.getPrice() * expectedEndingValuePctOfPrice;
-        this.LeaseFee = vehicleSold.getPrice() * leaseFeePercentage;
+    // Constructor to create a LeaseContract object
+    public LeaseContract(int leaseContractID, String contractDate, String customerName, String customerEmail, Vehicle vehicleSold) {
+        super(contractDate, customerName, customerEmail, vehicleSold);
+        this.leaseContractID = leaseContractID;
+        this.contractDate = contractDate;
+        this.customerName = customerName;
+        this.customerEmail = customerEmail;
+        this.vehicleSold = vehicleSold;
+        this.leaseContractExpectedFinalValue = leaseContractExpectedFinalValue;
+        this.leaseContractLeaseFee = leaseContractLeaseFee;
+        this.totalPrice = totalPrice;
+        this.monthlyPayment = monthlyPayment;
     }
 
-    public LeaseContract(String dateOfContract, String customerName, String customerEmail, Vehicle vehicleSold, double expectedEndingValue, double leaseFee) {
-        super(dateOfContract, customerName, customerEmail, vehicleSold);
-        this.expectedEndingValue = expectedEndingValue;
-        LeaseFee = leaseFee;
+    // Getters and Setters
+    public int getLeaseContractID() {
+        return leaseContractID;
     }
 
-    public static Contract buildFromEncodedData(String encodedData){
-        //super("asdf","asdf","asdf", null);
-        String[] cols = encodedData.split("\\|");
-
-        String contractDate = cols[1];
-        String contractName = cols[2];
-        String contractEmail = cols[3];
-        int vehicleVin = Integer.parseInt(cols[4]);
-        int vehicleYear = Integer.parseInt(cols[5]);
-        String vehicleMake = cols[6];
-        String vehicleModel = cols[7];
-        String vehicleType = cols[8];
-        String vehicleColor = cols[9];
-        int vehicleMiles = Integer.parseInt(cols[10]);
-        double vehiclePrice = Double.parseDouble(cols[11]);
-        double leaseContractExpectedEndingValue = Double.parseDouble(cols[12]);
-        double leaseContractLeaseFee = Double.parseDouble(cols[13]);
-
-        Vehicle v = new Vehicle(vehicleVin, vehicleYear, vehicleMake, vehicleModel, vehicleType, vehicleColor, vehicleMiles, vehiclePrice);
-
-        return new LeaseContract(contractDate,contractName, contractEmail, v, leaseContractExpectedEndingValue, leaseContractLeaseFee );
-
+    public void setLeaseContractID(int leaseContractID) {
+        this.leaseContractID = leaseContractID;
     }
 
-
-    public double getExpectedEndingValue() {
-        return expectedEndingValue;
+    public String getContractDate() {
+        return contractDate;
     }
 
-    public void setExpectedEndingValue(double expectedEndingValue) {
-        this.expectedEndingValue = expectedEndingValue;
+    public void setContractDate(String contractDate) {
+        this.contractDate = contractDate;
     }
 
-    public double getLeaseFee() {
-        return LeaseFee;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setLeaseFee(double leaseFee) {
-        this.LeaseFee = leaseFee;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
-    @Override
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public Vehicle getVehicleSold() {
+        return vehicleSold;
+    }
+
+    public void setVehicleSold(Vehicle vehicleSold) {
+        this.vehicleSold = vehicleSold;
+    }
+
+    public double getLeaseContractExpectedFinalValue() {
+        return leaseContractExpectedFinalValue;
+    }
+
+    public void setLeaseContractExpectedFinalValue(double leaseContractExpectedFinalValue) {
+        this.leaseContractExpectedFinalValue = leaseContractExpectedFinalValue;
+    }
+
+    public double getLeaseContractLeaseFee() {
+        return leaseContractLeaseFee;
+    }
+
+    public void setLeaseContractLeaseFee(double leaseContractLeaseFee) {
+        this.leaseContractLeaseFee = leaseContractLeaseFee;
+    }
+
     public double getTotalPrice() {
-        return (this.expectedEndingValue + this.getLeaseFee());
+        return totalPrice;
     }
 
-    @Override
-    public double getMonthlyPayment() {
-        double financeRate = 0.04;
-        double financeTerm = 36;
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 
-        return BankingCalculations.calculateLoanPayment(this.getTotalPrice(), financeRate, financeTerm);
+    public double getMonthlyPayment() {
+        return monthlyPayment;
+    }
+
+    public void setMonthlyPayment(double monthlyPayment) {
+        this.monthlyPayment = monthlyPayment;
     }
 
     @Override
@@ -79,15 +105,11 @@ public class LeaseContract extends Contract {
                 this.getCustomerName() + "|" +
                 this.getCustomerEmail() + "|" +
                 this.getVehicleSold().encode() + "|" +
-                this.getExpectedEndingValue() + "|" +
-                this.getLeaseFee() + "|" +
+                this.getLeaseContractExpectedFinalValue() + "|" +
+                this.getLeaseContractLeaseFee() + "|" +
                 this.getTotalPrice() + "|" +
                 this.getMonthlyPayment();
     }
-
-
-
-
 
 
 }

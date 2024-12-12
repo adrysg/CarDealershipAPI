@@ -4,7 +4,7 @@ import com.pluralsight.CarDealershipAPI.ColorCodes;
 import com.pluralsight.CarDealershipAPI.ITextEncodable;
 
 public class Vehicle implements ITextEncodable {
-    private int vin;
+    private int vehicleVin;
     private int year;
     private String make;
     private String model;
@@ -13,20 +13,23 @@ public class Vehicle implements ITextEncodable {
     private int odometer;
     private double price;
 
-    public Vehicle(int vin, int year, String make, String model, String vehicleType, String color, int odometer, double price) {
-        this.vin = vin;
-        this.year = year;
-        this.make = make;
-        this.model = model;
-        this.vehicleType = vehicleType;
-        this.color = color;
-        this.odometer = odometer;
-        this.price = price;
+    public Vehicle(int vehicleVin, int year, String make, String model, String vehicleType, String color, int odometer, double price) {
+        this.vehicleVin = vehicleVin;
+        this.year = this.year;
+        this.make = this.make;
+        this.model = this.model;
+        this.vehicleType = this.vehicleType;
+        this.color = this.color;
+        this.odometer = this.odometer;
+        this.price = this.price;
+    }
+
+    public void setVehicleVin(int vehicleVin) {
     }
 
     // Getters for all fields
-    public int getVin() {
-        return vin;
+    public int getVehicleVin() {
+        return vehicleVin;
     }
 
     public int getYear() {
@@ -75,7 +78,7 @@ public class Vehicle implements ITextEncodable {
     @Override
     public String encode() {
         return new StringBuilder()
-                .append(this.getVin()).append("|")
+                .append(this.getVehicleVin()).append("|")
                 .append(this.getYear()).append("|")
                 .append(this.getMake()).append("|")
                 .append(this.getModel()).append("|")
@@ -84,5 +87,7 @@ public class Vehicle implements ITextEncodable {
                 .append(this.getOdometer()).append("|")
                 .append(this.getPrice()).toString();
     }
+
+
 }
 
